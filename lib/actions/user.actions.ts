@@ -24,9 +24,22 @@ export async function getUserById(userId: string) {
   try {
     await connectToDatabase();
 
-    const user = await User.findOne({ clerkId: userId });
+    let user = await User.findOne({ clerkId: userId });
 
-    if (!user) throw new Error("User not found");
+    if (!user) {
+      // If user doesn't exist, create a default user
+      console.log("User not found, creating default user...");
+      user = await User.create({
+        clerkId: userId,
+        email: "default@example.com", // This will be updated by webhook
+        username: "user_" + userId.slice(-6), // Generate a username
+        photo: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&dpr=2&q=80",
+        firstName: "User",
+        lastName: "Default",
+        planId: 1,
+        creditBalance: 10,
+      });
+    }
 
     return JSON.parse(JSON.stringify(user));
   } catch (error) {

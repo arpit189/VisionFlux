@@ -53,7 +53,7 @@ const MediaUploader = ({
 
   return (
     <CldUploadWidget
-      uploadPreset="jsm_VisionFlux"
+      uploadPreset= "VisionFlux"
       options={{
         multiple: false,
         resourceType: "image",
